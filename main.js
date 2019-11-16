@@ -8,10 +8,6 @@ module.exports.loop = function () {
 
     // Only run every 5 ticks
     if (Game.time % 5 === 0) {
-        var harvesterTarget = 2;
-        var upgraderTarget = 2;
-        var builderTarget = 1;
-
         // Clear old creeps's data from memory
         for (var name in Memory.creeps) {
             if (!Game.creeps[name]) {
@@ -27,21 +23,21 @@ module.exports.loop = function () {
 
         // TODO: Make a queue to better control creep spawn order
         // If fewer creeps exist than the role target, spawn a new creep
-        if (harvesters.length < harvesterTarget) {
+        if (harvesters.length < config.roleTargets.harvesters) {
             var newName = 'Harvester' + Game.time;
-            console.log('Under harvester target: ' + harvesters.length.toString() + '/' + harvesterTarget.toString());
+            console.log('Under harvester target: ' + harvesters.length.toString() + '/' + config.roleTargets.harvesters.toString());
             Game.spawns['Spawn1'].spawnCreep([WORK, CARRY, MOVE], newName, {memory: {role: 'harvester'}});
         }
-        if (upgraders.length < upgraderTarget) {
+        if (upgraders.length < config.roleTargets.upgraders) {
             var newName = 'Upgrader' + Game.time;
-            console.log('Under upgrader target: ' + upgraders.length.toString() + '/' + upgraderTarget.toString());
+            console.log('Under upgrader target: ' + upgraders.length.toString() + '/' + config.roleTargets.upgraders.toString());
             if (!Game.spawns['Spawn1'].spawning) { // Don't attempt to spawn if the spawner is busy
                 Game.spawns['Spawn1'].spawnCreep([WORK, CARRY, MOVE], newName, {memory: {role: 'upgrader'}});
             }
         }
-        if (builders.length < builderTarget) {
+        if (builders.length < config.roleTargets.builders) {
             var newName = 'Builder' + Game.time;
-            console.log('Under builder target: ' + builders.length.toString() + '/' + builderTarget.toString());
+            console.log('Under builder target: ' + builders.length.toString() + '/' + config.roleTargets.builders.toString());
             if (!Game.spawns['Spawn1'].spawning) { // Don't attempt to spawn if the spawner is busy
                 Game.spawns['Spawn1'].spawnCreep([WORK, CARRY, MOVE], newName, {memory: {role: 'builder'}});
             }
