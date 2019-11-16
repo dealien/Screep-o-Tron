@@ -12,6 +12,14 @@ module.exports.loop = function () {
         var upgraderTarget = 2;
         var builderTarget = 1;
 
+        // Clear old creeps's data from memory
+        for (var name in Memory.creeps) {
+            if (!Game.creeps[name]) {
+                delete Memory.creeps[name];
+                console.log('Clearing non-existing creep memory:', name);
+            }
+        }
+
         // Count how many creeps exist with the various roles
         var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
         var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
