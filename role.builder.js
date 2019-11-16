@@ -3,6 +3,13 @@ var roleBuilder = {
 
     /** @param {Creep} creep **/
     run: function (creep) {
+        // Update room sign
+        if (creep.room.controller.sign.text != config.sign) {
+            creep.say('✏ sign');
+            creep.memory.sign = true;
+        } else {
+            creep.memory.sign = false;
+        }
 
         if (creep.memory.building && creep.store[RESOURCE_ENERGY] == 0) {
             creep.memory.building = false;
@@ -13,7 +20,7 @@ var roleBuilder = {
             creep.say('🚧 build');
         }
 
-        if (creep.memory.building) {
+        if (creep.memory.building && !creep.memory.sign) {
             var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
             // TODO: If no build target is found, act as upgrader to prevent blocking sources
             if (targets.length) { // If there are objects waiting to be built, build them
@@ -32,6 +39,10 @@ var roleBuilder = {
                         creep.moveTo(creep.room.controller);
                     }
                 }
+            }
+        } else if (creep.memory.sign) {
+            if (creep.signController(creep.room.controller, config.sign) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(creep.room.controller);
             }
         } else {
             var sources = creep.room.find(FIND_SOURCES);
