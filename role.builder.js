@@ -46,6 +46,8 @@ var roleBuilder = {
             }
         } else {
             var sources = creep.room.find(FIND_SOURCES);
+            sources = _.sortBy(sources, s => creep.pos.getRangeTo(s)); // Harvest from the closest source
+
             if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
                 if (config.visualizer.showCreepPaths == true) {
                     creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
