@@ -25,6 +25,7 @@ module.exports.loop = function () {
         var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
         var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
 
+        // TODO: Make a queue to better control creep spawn order
         // If fewer creeps exist than the role target, spawn a new creep
         if (harvesters.length < harvesterTarget) {
             var newName = 'Harvester' + Game.time;
@@ -34,16 +35,20 @@ module.exports.loop = function () {
         if (upgraders.length < upgraderTarget) {
             var newName = 'Upgrader' + Game.time;
             console.log('Under upgrader target: ' + upgraders.length.toString() + '/' + upgraderTarget.toString());
-            Game.spawns['Spawn1'].spawnCreep([WORK, CARRY, MOVE], newName, {memory: {role: 'upgrader'}});
+            if (!Game.spawns['Spawn1'].spawning) { // Don't attempt to spawn if the spawner is busy
+                Game.spawns['Spawn1'].spawnCreep([WORK, CARRY, MOVE], newName, {memory: {role: 'upgrader'}});
+            }
         }
         if (builders.length < builderTarget) {
             var newName = 'Builder' + Game.time;
             console.log('Under builder target: ' + builders.length.toString() + '/' + builderTarget.toString());
-            Game.spawns['Spawn1'].spawnCreep([WORK, CARRY, MOVE], newName, {memory: {role: 'builder'}});
+            if (!Game.spawns['Spawn1'].spawning) { // Don't attempt to spawn if the spawner is busy
+                Game.spawns['Spawn1'].spawnCreep([WORK, CARRY, MOVE], newName, {memory: {role: 'builder'}});
+            }
         }
     }
 
-    // TODO: Consider moving this to a separate visualization module
+    // TODO: Consider moving this to a separate visualization or spawner module
     if (Game.spawns['Spawn1'].spawning) {
         var spawningCreep = Game.creeps[Game.spawns['Spawn1'].spawning.name];
         Game.spawns['Spawn1'].room.visual.text(
