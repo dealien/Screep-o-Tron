@@ -1,6 +1,6 @@
 var config = require('config');
 
-function travelTo(creep, source) {
+function travelTo(creep, source, color = '#ffffff') {
     if (config.visualizer.showCreepPaths == true) {
         creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
     } else {
@@ -24,7 +24,7 @@ var roleHarvester = {
             }
 
             if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
-                travelTo(creep, source);
+                travelTo(creep, source, '#ffaa00');
             }
         } else {
             var targets = creep.room.find(FIND_STRUCTURES, {
@@ -35,7 +35,7 @@ var roleHarvester = {
             });
             if (targets.length > 0) {
                 if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    travelTo(creep,targets[0])
+                    travelTo(creep, targets[0], '#ffffff')
                 }
             }
         }
