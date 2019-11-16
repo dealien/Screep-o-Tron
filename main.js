@@ -1,3 +1,4 @@
+var config = require('config');
 var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
@@ -13,7 +14,7 @@ module.exports.loop = function () {
 
         // Count how many creeps exist with the various roles
         var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
-        var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrder');
+        var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
         var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
 
         // If fewer creeps exist than the role target, spawn a new creep
@@ -25,12 +26,12 @@ module.exports.loop = function () {
         if (upgraders.length < upgraderTarget) {
             var newName = 'Upgrader' + Game.time;
             console.log('Under upgrader target: ' + upgraders.length.toString() + '/' + upgraderTarget.toString());
-            Game.spawns['Spawn1'].spawnCreep([WORK, CARRY, MOVE], newName, {memory: {role: 'harvester'}});
+            Game.spawns['Spawn1'].spawnCreep([WORK, CARRY, MOVE], newName, {memory: {role: 'upgrader'}});
         }
         if (builders.length < builderTarget) {
             var newName = 'Builder' + Game.time;
             console.log('Under builder target: ' + builders.length.toString() + '/' + builderTarget.toString());
-            Game.spawns['Spawn1'].spawnCreep([WORK, CARRY, MOVE], newName, {memory: {role: 'harvester'}});
+            Game.spawns['Spawn1'].spawnCreep([WORK, CARRY, MOVE], newName, {memory: {role: 'builder'}});
         }
     }
 
