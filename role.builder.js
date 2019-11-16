@@ -15,12 +15,21 @@ var roleBuilder = {
 
         if (creep.memory.building) {
             var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
-            if (targets.length) {
+            // TODO: If no build target is found, act as upgrader to prevent blocking sources
+            if (targets.length) { // If there are objects waiting to be built, build them
                 if (creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
                     if (config.visualizer.showCreepPaths == true) {
                         creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
                     } else {
                         creep.moveTo(targets[0]);
+                    }
+                }
+            } else { // If no build target is found, act as upgrader
+                if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+                    if (config.visualizer.showCreepPaths == true) {
+                        creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
+                    } else {
+                        creep.moveTo(creep.room.controller);
                     }
                 }
             }

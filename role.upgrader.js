@@ -20,7 +20,6 @@ var roleUpgrader = {
                 } else {
                     creep.moveTo(creep.room.controller);
                 }
-
             }
         } else {
             var sources = creep.room.find(FIND_SOURCES);
